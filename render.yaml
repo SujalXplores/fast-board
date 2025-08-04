@@ -1,0 +1,15 @@
+version: 1
+build:
+  commands:
+    - pip install -r requirements.txt
+run:
+  command: python main.py
+env:
+  - key: DEBUG
+    value: "False"
+  - key: HOST
+    value: "0.0.0.0"
+  - key: PORT
+    value: "8000"
+  - key: LOG_LEVEL
+    value: "INFO"
