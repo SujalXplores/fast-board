@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FastBoard - Collaborative Whiteboard</title>
+  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    #whiteboard-canvas {
+      cursor: crosshair;
+      background-color: white;
+    }
+
+    .tool-active {
+      @apply bg-blue-600 text-white;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-800 text-white min-h-screen">
+  <div class="flex h-screen">
+    <!-- Left Toolbar -->
+    <div class="w-64 bg-gray-900 p-6 shadow-lg">
+      <h2 class="text-xl font-bold mb-6 text-center">Tools</h2>
+
+      <!-- Drawing Tools -->
+      <div class="mb-6">
+        <h3 class="text-sm font-semibold mb-3 text-gray-300">Drawing Tools</h3>
+        <div class="space-y-2">
+          <button id="pen-tool"
+            class="w-full px-4 py-3 rounded-lg bg-gray-700 hover:bg-gray-600 transition-colors tool-active">
+            🖊️ Pen
+          </button>
+          <button id="eraser-tool" class="w-full px-4 py-3 rounded-lg bg-gray-700 hover:bg-gray-600 transition-colors">
+            🧹 Eraser
+          </button>
+        </div>
+      </div>
+
+      <!-- Brush Size -->
+      <div class="mb-6">
+        <h3 class="text-sm font-semibold mb-3 text-gray-300">Brush Size</h3>
+        <input type="range" id="brush-size" min="1" max="50" value="5"
+          class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer">
+        <div class="text-center mt-2 text-sm text-gray-400">
+          <span id="size-display">5px</span>
+        </div>
+      </div>
+
+      <!-- Color Picker -->
+      <div class="mb-6">
+        <h3 class="text-sm font-semibold mb-3 text-gray-300">Color</h3>
+        <input type="color" id="color-picker" value="#000000"
+          class="w-full h-12 rounded-lg cursor-pointer bg-gray-700 border-2 border-gray-600">
+      </div>
+
+      <!-- Actions -->
+      <div class="space-y-3">
+        <button id="clear-board" class="w-full px-4 py-3 rounded-lg bg-red-600 hover:bg-red-700 transition-colors">
+          🗑️ Clear Board
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 flex flex-col">
+      <!-- Top Header -->
+      <header class="bg-gray-900 p-4 shadow-lg">
+        <div class="flex items-center justify-between">
+          <h1 class="text-2xl font-bold">FastBoard</h1>
+          <div class="flex items-center space-x-4">
+            <div class="flex items-center space-x-2">
+              <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+              <span class="text-sm text-gray-300">
+                Users online: <span id="user-count" class="font-semibold text-white">1</span>
+              </span>
+            </div>
+            <button id="ai-assist"
+              class="px-6 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 transition-colors font-semibold">
+              🤖 AI Assist
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Canvas Area -->
+      <div class="flex-1 p-6 bg-gray-700">
+        <div class="w-full h-full bg-white rounded-lg shadow-xl overflow-hidden">
+          <canvas id="whiteboard-canvas" class="w-full h-full block"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI Assist Modal -->
+  <div id="ai-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+    <div class="flex items-center justify-center min-h-screen p-4">
+      <div class="bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+        <div class="p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-semibold text-white">AI Interpretation</h3>
+            <button id="close-ai-modal" class="text-gray-400 hover:text-white">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+          <div id="ai-result" class="text-gray-300">
+            <!-- AI response will be displayed here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div id="loading-spinner" class="fixed inset-0 bg-black bg-opacity-75 hidden z-50">
+    <div class="flex items-center justify-center min-h-screen">
+      <div class="bg-gray-800 rounded-lg p-6 text-center">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto mb-4"></div>
+        <p class="text-white">Processing with AI...</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/board.js"></script>
+</body>
+
+</html>
